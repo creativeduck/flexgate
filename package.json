@@ -1,0 +1,28 @@
+{
+  "name": "flexgate",
+  "version": "1.0.0",
+  "main": "./lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/creativeduck/flexgate.git"
+  },
+  "author": {
+    "name": "creativeduck",
+    "email": "creativeduck0518@gmail.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^20.4.2",
+    "axios": "^1.4.0",
+    "tslint": "^6.1.3",
+    "typescript": "^5.1.6"
+  },
+  "files": [
+    "./bin/*",
+    "./lib/*"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js"
+  }
+}
