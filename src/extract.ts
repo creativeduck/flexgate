@@ -38,8 +38,11 @@ async function getReview(
 }
 
 export default async function extract(url: string, lastReviewId?: number) {
-  const urls = url.split('/')
-  const mgCode = urls[urls.length - 1]
+  const pathName = new URL(url).pathname.split('/')
+  const mgCode = pathName[pathName.length - 1]
+  if (!mgCode) {
+    throw new Error()
+  }
   let page = 1
   let done = false
   const { data, dataTotalCount } = await getReview(page, mgCode)
@@ -67,7 +70,8 @@ export default async function extract(url: string, lastReviewId?: number) {
   }
 
   let itemCount = results.length
-  while (!done && itemCount < Math.min(dataTotalCount, 200)) {
+  const max = lastReviewId ? dataTotalCount : Math.min(dataTotalCount, 200)
+  while (!done && itemCount < max) {
     const { data } = await getReview(++page, mgCode)
     for (const review of data) {
       if (review.c_idx === lastReviewId) {
