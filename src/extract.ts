@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { ReviewData, ReviewResult } from './type'
 
-async function getReview  host: string,
+async function getReview(
+  host: string,
   page: number,
   mgCode: string,
   pageSize = 5,
