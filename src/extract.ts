@@ -1,14 +1,13 @@
 import axios from 'axios'
 import { ReviewData, ReviewResult } from './type'
 
-async function getReview(
+async function getReview  host: string,
   page: number,
   mgCode: string,
   pageSize = 5,
   orderBy = 'new'
 ) {
-  const baseUrl = 'https://www.goodsendfarmer.com/Goods/GetReviewList'
-
+  const baseUrl = `https://${host}/Goods/GetReviewList`
   const response = await axios.post<{
     result: string
     errorMsg: string
@@ -38,14 +37,16 @@ async function getReview(
 }
 
 export default async function extract(url: string, lastReviewId?: number) {
-  const pathName = new URL(url).pathname.split('/')
-  const mgCode = pathName[pathName.length - 1]
+  const urlObj = new URL(url)
+  const host = urlObj.host
+  const urls = urlObj.pathname.split('/')
+  const mgCode = urls[urls.length - 1]
   if (!mgCode) {
     throw new Error()
   }
   let page = 1
   let done = false
-  const { data, dataTotalCount } = await getReview(page, mgCode)
+  const { data, dataTotalCount } = await getReview(host, page, mgCode)
   const results: ReviewResult[] = []
 
   for (const review of data) {
@@ -72,7 +73,7 @@ export default async function extract(url: string, lastReviewId?: number) {
   let itemCount = results.length
   const max = lastReviewId ? dataTotalCount : Math.min(dataTotalCount, 200)
   while (!done && itemCount < max) {
-    const { data } = await getReview(++page, mgCode)
+    const { data } = await getReview(host, ++page, mgCode)
     for (const review of data) {
       if (review.c_idx === lastReviewId) {
         done = true
@@ -91,8 +92,6 @@ export default async function extract(url: string, lastReviewId?: number) {
       itemCount++
     }
   }
-
-  console.log(results)
 
   return results
 }

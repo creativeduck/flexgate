@@ -1,5 +1,9 @@
 import extract from './extract'
 
-const url = 'https://www.goodsendfarmer.com/Goods/Detail/SSU47284645'
-const lastReviewId = 2286
-extract(url, lastReviewId)
+const url = 'https://www.blancdubu.com/Goods/Detail/SBL86696187'
+const lastReviewId = undefined
+
+;(async () => {
+  const result = await extract(url, lastReviewId)
+  console.log(result)
+})()
