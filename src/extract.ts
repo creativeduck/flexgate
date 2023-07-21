@@ -1,12 +1,16 @@
 import axios from 'axios'
 import { ReviewData, ReviewResult } from './type'
 
+const defaultPageSize = 5
+const defaultOrderBy = 'new'
+const defaultResultSize = 200
+
 async function getReview(
   host: string,
   page: number,
   mgCode: string,
-  pageSize = 5,
-  orderBy = 'new'
+  pageSize = defaultPageSize,
+  orderBy = defaultOrderBy
 ) {
   const baseUrl = `https://${host}/Goods/GetReviewList`
   const response = await axios.post<{
@@ -18,10 +22,10 @@ async function getReview(
     }
     dataTotalCount: number
   }>(baseUrl, {
-    page: page,
+    page,
     pagesize: pageSize,
     mg_code: mgCode,
-    orderBy: orderBy,
+    orderBy,
   })
 
   const data = response.data.data.data
@@ -40,13 +44,13 @@ export default async function extract(url: string, lastReviewId?: number) {
   const urls = urlObj.pathname.split('/')
   const mgCode = urls[urls.length - 1]
   let page = 1
-  let itemCount = 0
-  let done = false
-  const { dataTotalCount } = await getReview(host, page, mgCode)
-  const max = lastReviewId ? dataTotalCount : Math.min(dataTotalCount, 200)
 
-  while (!done && itemCount < max) {
+  do {
     const { data } = await getReview(host, page++, mgCode)
+    if (!data.length) {
+      break
+    }
+
     const reviews = data.map(review => {
       return {
         reviewId: review.c_idx,
@@ -63,12 +67,11 @@ export default async function extract(url: string, lastReviewId?: number) {
     )
     if (findIndex !== -1) {
       results.push(...reviews.slice(0, findIndex))
-      done = true
+      break
     } else {
       results.push(...reviews)
-      itemCount += 5
     }
-  }
+  } while (results.length < defaultResultSize)
 
   return results
 }
