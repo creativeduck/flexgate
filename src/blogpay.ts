@@ -69,9 +69,8 @@ export async function extract(url: string, lastReviewId?: string) {
     if (findIndex !== -1) {
       results.push(...reviews.slice(0, findIndex))
       break
-    } else {
-      results.push(...reviews)
     }
+    results.push(...reviews)
   } while (results.length < 200)
 
   return results
