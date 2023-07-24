@@ -37,7 +37,7 @@ async function getReview(
   }
 }
 
-export default async function extract(url: string, lastReviewId?: number) {
+export default async function extract(url: string, lastReviewId?: string) {
   const results: ReviewResult[] = []
   const urlObj = new URL(url)
   const host = urlObj.host

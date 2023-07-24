@@ -7,7 +7,7 @@ export type ReviewData = {
   sc_idx: number
   replyList: string
   photoList: string
-  c_idx: number
+  c_idx: string
   c_grade: number
   mrl_cnt: number
   mrl_like: number
@@ -16,7 +16,7 @@ export type ReviewData = {
 }
 
 export type ReviewResult = {
-  reviewId: number
+  reviewId: string
   message: string
   writer: string
   optionValue: string // 구할 수 없으면 ''
