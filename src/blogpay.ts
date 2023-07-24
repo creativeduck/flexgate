@@ -2,6 +2,8 @@ import axios from 'axios'
 import { load } from 'cheerio'
 import { ReviewResult } from './type'
 
+const defaultResultSize = 200
+
 function getUrl(host: string, goodNum: string, pageNum: number) {
   return `https://${host}/good/product_view_goodrate_list?goodNum=${goodNum}&page=${pageNum}`
 }
@@ -46,7 +48,7 @@ export async function extract(url: string, lastReviewId?: string) {
       const images = [...$(review).find('div.review-imgwrap > img')].map(
         img => `https://${host}${img.attribs['src']}`
       )
-      const optionValue = ''
+      const optionValue = ['']
 
       return {
         reviewId,
@@ -71,7 +73,7 @@ export async function extract(url: string, lastReviewId?: string) {
       break
     }
     results.push(...reviews)
-  } while (results.length < 200)
+  } while (results.length < defaultResultSize)
 
   return results
 }

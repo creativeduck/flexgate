@@ -19,8 +19,8 @@ export type ReviewResult = {
   reviewId: string
   message: string
   writer: string
-  optionValue: string // 구할 수 없으면 ''
+  optionValue: string[]
   date: string
-  rate: number | null // 구할 수 없거나 0 이면 null
+  rate: number | null
   images: string[]
 }
