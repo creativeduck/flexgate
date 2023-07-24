@@ -21,6 +21,6 @@ export type ReviewResult = {
   writer: string
   optionValue: string[]
   date: string
-  rate: number | null
+  rate: number | undefined
   images: string[]
 }
