@@ -56,7 +56,7 @@ export default async function extract(url: string, lastReviewId?: string) {
         reviewId: review.c_idx,
         message: review.c_content.trim(),
         writer: review.c_name,
-        optionValue: '',
+        optionValue: [''],
         date: review.c_regdate,
         rate: review.c_grade,
         images: review.photoList.split('~|~').filter(photo => photo.length > 0),
@@ -68,9 +68,8 @@ export default async function extract(url: string, lastReviewId?: string) {
     if (findIndex !== -1) {
       results.push(...reviews.slice(0, findIndex))
       break
-    } else {
-      results.push(...reviews)
     }
+    results.push(...reviews)
   } while (results.length < defaultResultSize)
 
   return results
